@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/interectboard/static/css/main.e4823709.css",
+    "main.js": "/interectboard/static/js/main.0979b5ed.js",
+    "index.html": "/interectboard/index.html",
+    "main.e4823709.css.map": "/interectboard/static/css/main.e4823709.css.map",
+    "main.0979b5ed.js.map": "/interectboard/static/js/main.0979b5ed.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e4823709.css",
+    "static/js/main.0979b5ed.js"
+  ]
+}
