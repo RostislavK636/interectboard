@@ -1,4 +1,5 @@
-import React, {use, useState} from 'react'
+import React, { useEffect, useState} from 'react'
+import {Routes, Route } from "react-router-dom";
 import Header from './components/Header'
 import Footer from './components/Footer' 
 import Catalog from './components/Catalog'
@@ -6,29 +7,52 @@ import FullBoard from './components/FullBoard'
 
 function App() {
 
-  const [catalog, setCatalog] = useState([]);
+  // filter category
+  const [activeFilter, setActiveFilter] = useState(0)
+  
+  
+  
+// sort category
+  const sotrName = [
+      {id:'sortBy=createdAt&order=asc', label: 'возрастанию даты' },
+      {id:'sortBy=createdAt&order=desc', label: 'убыванию даты' },
+      {id:'sortBy=rating&order=asc', label: 'возрастанию рейтинга' },
+      {id:'sortBy=rating&order=desc', label: 'убыванию рейтинга' },
+  ]
 
-  fetch('https://698e3096aded595c25314dea.mockapi.io/boards')
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    setCatalog(data);
-  });
-
-  const [ifFull, setIsFull] = useState(false);
-  const [getBoard, setGetBoard] = useState(null)
-
-  const showBoard = (catalog) => {
-    if(catalog){
-      setIsFull(true);
-      setGetBoard(catalog);
-    } else {
-      setIsFull(false);
-      setGetBoard(null)
-    }
+  const [showSort, setShowSort] = useState('умолчанию')
+  const [showSortId, setShowSortId] = useState('умолчанию')
+  const [showDisplay, setShowDisplay] = useState(false)
+  const showList = (name) => {
+      setShowSort(name.label)
+      setShowSortId(name.id)
+      setShowDisplay(false)
   }
 
+  // mockapi
+  const [catalog, setCatalog] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      setCatalog(data);
+      setIsLoading(false)
+    });
+  }, [activeFilter, showSortId])
+
+
+  const [getBoard, setGetBoard] = useState(null)
+  const showBoard = (board) => {
+      setGetBoard(board);
+  }
+
+
+  // header and footer
   const[active, setActive] = useState(0)
 
   const showActive = (index) => {
@@ -37,10 +61,37 @@ function App() {
 
 
 
+
   return (
     <div className="App">
       <Header showActive={showActive} active={active}/>
-      {ifFull ? <FullBoard board={getBoard} showBoard={showBoard}/>: <Catalog catalog={catalog} showBoard={showBoard}/>  }
+      <Routes>
+        <Route 
+          path="/interectboard" 
+          element={
+            <Catalog 
+              catalog={catalog} 
+              isLoading={isLoading} 
+              setActiveFilter={setActiveFilter}
+              activeFilter={activeFilter}
+              sotrName={sotrName}
+              showList={showList}
+              setShowDisplay={setShowDisplay}
+              showDisplay={showDisplay}
+              showSort={showSort}
+              showBoard={showBoard}
+            />
+          } 
+        />        
+        <Route path="/board/:boardId" element={
+          <FullBoard board={getBoard}/>} 
+        />
+      </Routes> 
+      
+    
+       {/* <FullBoard board={getBoard} showBoard={showBoard}/> */}
+       {/* <Catalog catalog={catalog} isLoading={isLoading} showBoard={showBoard}/>   */}
+      
       <Footer showActive={showActive} active={active}/>
     </div>
   );

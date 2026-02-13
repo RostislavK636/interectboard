@@ -1,4 +1,5 @@
 import React,{useRef, useEffect}from 'react'
+import { Link } from "react-router-dom";
 
 export default function FullBoard(props) {
 
@@ -8,16 +9,16 @@ export default function FullBoard(props) {
         const root = canvasRef.current;
         if (!root) return;
 
-        root.style.position = 'relstive'
+        root.style.position = 'relative'
 
         let dragged = null;
         let shiftX = 0;
         let shiftY = 0;
         
         const onMouseDown = (e) => {
-            const el = e.target;
-            while(!el && el !== root && !el.hasAttribute('data-js-dsn')){
-                el = el.parentElemnt
+            let el = e.target;
+            while(!el && el !== root && !el.hasAttribute('data-js-dnd')){
+                el = el.parentElement
             }
             if(!el || el === root) return;
 
@@ -56,8 +57,8 @@ export default function FullBoard(props) {
         }
 
         const onMouseUp =()=> {
-            if(!dragged) {
-                dragged.clssList.remove('is-dragging');
+            if(dragged) {
+                dragged.classList.remove('is-dragging');
                 dragged.style.cursor = 'grab'
             }
 
@@ -94,7 +95,7 @@ export default function FullBoard(props) {
                 <h2>{props.board.title}</h2>
                 <h4>{props.board.description}</h4>
                 <h3>{props.board.createdAt}</h3>
-                <button onClick={() => props.showBoard(null)}>Назад</button>
+                <Link to='/'><button className='btn-card'>Назад</button></Link>
             </div>
         </div>
     </div>
