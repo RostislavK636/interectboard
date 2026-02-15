@@ -1,6 +1,7 @@
 import React from 'react'
 import Sceleton from './BorderBlock/Skeleton.js'
 import Border from './BorderBlock/index.js'
+import Pagination from './Pagination/index.js'
 
 export default function Catalog(props) {
 
@@ -45,10 +46,12 @@ export default function Catalog(props) {
         <div className='catalog'>
             {
                 props.isLoading 
-                ? [...new Array(6)].map((_, index) => <Sceleton key={index}/>) 
+                ? [...new Array(3)].map((_, index) => <Sceleton key={index}/>) 
                 : pizzas 
             }
         </div>
+
+        <Pagination page={(el) => props.setPage(el)}/>
         </>
     )
 }

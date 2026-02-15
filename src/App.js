@@ -50,6 +50,8 @@ function App() {
   const [search, setSearch] = useState('')
 
 
+  const [page, setPage] = useState(1)
+  console.log(page)
 
   // mockapi
   const [catalog, setCatalog] = useState([]);
@@ -57,7 +59,7 @@ function App() {
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?&search=${search}&${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}&search=${search}`)
+    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?p=${page}&l=3&search=${search}&${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}&search=${search}`)
     .then((response) => {
       return response.json();
     })
@@ -65,7 +67,7 @@ function App() {
       setCatalog(data);
       setIsLoading(false)
     });
-  }, [activeFilter, showSortId, search])
+  }, [activeFilter, showSortId, search, page])
 
 
   return (
@@ -92,6 +94,7 @@ function App() {
               showSort={showSort}
               showBoard={showBoard}
               search={search}
+              setPage={setPage}
             />
           } 
         />        
