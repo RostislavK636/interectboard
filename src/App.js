@@ -7,7 +7,16 @@ import FullBoard from './components/FullBoard'
 
 function App() {
 
-  // filter category
+    // header and footer
+  const[active, setActive] = useState(0)
+
+  const showActive = (index) => {
+    setActive(index)
+  }
+
+
+
+// filter category
   const [activeFilter, setActiveFilter] = useState(0)
   
   
@@ -20,8 +29,8 @@ function App() {
       {id:'sortBy=rating&order=desc', label: 'убыванию рейтинга' },
   ]
 
-  const [showSort, setShowSort] = useState('умолчанию')
-  const [showSortId, setShowSortId] = useState('умолчанию')
+  const [showSort, setShowSort] = useState(sotrName[0].label)
+  const [showSortId, setShowSortId] = useState()
   const [showDisplay, setShowDisplay] = useState(false)
   const showList = (name) => {
       setShowSort(name.label)
@@ -29,13 +38,26 @@ function App() {
       setShowDisplay(false)
   }
 
+
+// get active board before click to card
+  const [getBoard, setGetBoard] = useState(null)
+  const showBoard = (board) => {
+      setGetBoard(board);
+  }
+
+
+  // search controled
+  const [search, setSearch] = useState('')
+
+
+
   // mockapi
   const [catalog, setCatalog] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}`)
+    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?&search=${search}&${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}&search=${search}`)
     .then((response) => {
       return response.json();
     })
@@ -43,28 +65,17 @@ function App() {
       setCatalog(data);
       setIsLoading(false)
     });
-  }, [activeFilter, showSortId])
-
-
-  const [getBoard, setGetBoard] = useState(null)
-  const showBoard = (board) => {
-      setGetBoard(board);
-  }
-
-
-  // header and footer
-  const[active, setActive] = useState(0)
-
-  const showActive = (index) => {
-    setActive(index)
-  }
-
-
+  }, [activeFilter, showSortId, search])
 
 
   return (
     <div className="App">
-      <Header showActive={showActive} active={active}/>
+      <Header
+        showActive={showActive}
+        active={active}
+        search={search}
+        setSearch={setSearch}
+        />
       <Routes>
         <Route 
           path="/interectboard" 
@@ -80,6 +91,7 @@ function App() {
               showDisplay={showDisplay}
               showSort={showSort}
               showBoard={showBoard}
+              search={search}
             />
           } 
         />        
@@ -88,9 +100,7 @@ function App() {
         />
       </Routes> 
       
-    
-       {/* <FullBoard board={getBoard} showBoard={showBoard}/> */}
-       {/* <Catalog catalog={catalog} isLoading={isLoading} showBoard={showBoard}/>   */}
+  
       
       <Footer showActive={showActive} active={active}/>
     </div>

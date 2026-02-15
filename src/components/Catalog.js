@@ -3,6 +3,16 @@ import Sceleton from './BorderBlock/Skeleton.js'
 import Border from './BorderBlock/index.js'
 
 export default function Catalog(props) {
+
+    const pizzas = props.catalog
+    // .filter((catalog) => {
+    //     if (catalog.title.toLowerCase().includes(props.search.toLowerCase())) {
+    //         return true;
+    //     } return })
+        .map((catalog) => <Border key={catalog.id} catalog={catalog} 
+                                                    showBoard={props.showBoard} 
+                                                    search={props.Search} 
+                                                    setSearch={props.setSearch}/>)
     return(
         <>
         <h1>Каталог всех досупных досок</h1>
@@ -30,11 +40,13 @@ export default function Catalog(props) {
 
         </div>
 
+
+
         <div className='catalog'>
             {
                 props.isLoading 
                 ? [...new Array(6)].map((_, index) => <Sceleton key={index}/>) 
-                : props.catalog.map((catalog) => <Border key={catalog.id} catalog={catalog} showBoard={props.showBoard}/> )
+                : pizzas 
             }
         </div>
         </>
