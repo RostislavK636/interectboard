@@ -95,7 +95,7 @@ export default function FullBoard(props) {
                 <h2>{props.board.title}</h2>
                 <h4>{props.board.description}</h4>
                 <h3>{props.board.createdAt}</h3>
-                <Link to='/'><button className='btn-card'>Назад</button></Link>
+                <Link to='/interectboard'><button className='btn-card'>Назад</button></Link>
             </div>
         </div>
     </div>

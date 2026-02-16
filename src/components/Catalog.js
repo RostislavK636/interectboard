@@ -5,8 +5,10 @@ import Pagination from './Pagination/index.js'
 
 export default function Catalog(props) {
 
-    const pizzas = props.catalog.map((catalog) => <Border key={catalog.id} catalog={catalog} 
-                                                    showBoard={props.showBoard} />)
+    const pizzas = Array.isArray(props.catalog)
+    ? props.catalog.map(catalog => <Border key={catalog.id} catalog={catalog} showBoard={props.showBoard} />)
+    : <h2>По вашему запросу ничего не найдено</h2>
+    
     return(
         <>
         <h1>Каталог всех досупных досок</h1>
@@ -40,7 +42,8 @@ export default function Catalog(props) {
             {
                 props.isLoading 
                 ? [...new Array(3)].map((_, index) => <Sceleton key={index}/>) 
-                : pizzas 
+                : pizzas
+                    
             }
         </div>
 

@@ -25,18 +25,18 @@ function App() {
   
 // sort category
   const sotrName = [
-      {id:'sortBy=createdAt&order=asc', label: 'возрастанию даты' },
-      {id:'sortBy=createdAt&order=desc', label: 'убыванию даты' },
-      {id:'sortBy=rating&order=asc', label: 'возрастанию рейтинга' },
-      {id:'sortBy=rating&order=desc', label: 'убыванию рейтинга' },
+      { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
+      { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
+      { sortBy: 'rating', order: 'asc', label: 'возрастанию рейтинга' },
+      { sortBy: 'rating', order: 'desc', label: 'убыванию рейтинга' },
   ]
 
   const [showSort, setShowSort] = useState(sotrName[0].label)
-  const [showSortId, setShowSortId] = useState()
+  const [showSortId, setShowSortId] = useState(sotrName[0])
   const [showDisplay, setShowDisplay] = useState(false)
   const showList = (name) => {
       setShowSort(name.label)
-      setShowSortId(name.id)
+      setShowSortId(name)
       setShowDisplay(false)
   }
 
@@ -54,22 +54,46 @@ function App() {
 
 
   const [page, setPage] = useState(1)
-  console.log(page)
-
   // mockapi
   const [catalog, setCatalog] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(activeFilter === 0 ? `https://698e3096aded595c25314dea.mockapi.io/boards?p=${page}&l=3&search=${search}&${showSortId}` : `https://698e3096aded595c25314dea.mockapi.io/boards?category=${activeFilter}&${showSortId}&search=${search}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      setCatalog(data);
-      setIsLoading(false)
-    });
+    
+    const params = new URLSearchParams()
+    
+    // Всегда добавляем лимит
+    params.append('l', 3)
+    
+    // Поиск только если есть текст
+    if (search) {
+      params.append('search', search)
+    }
+    
+    // Сортировка - добавляем только если выбрана
+    if (showSortId?.sortBy && showSortId?.order) {
+      params.append('sortBy', showSortId.sortBy)
+      params.append('order', showSortId.order)
+    }
+    
+    // В зависимости от фильтра добавляем разные параметры
+    if (activeFilter !== 0) {
+      params.append('category', activeFilter)
+    }
+    
+    const url = `https://698e3096aded595c25314dea.mockapi.io/boards?${params}`
+    
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setCatalog(data)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error('Ошибка запроса:', error)
+        setIsLoading(false)
+      })
   }, [activeFilter, showSortId, search, page])
 
 
