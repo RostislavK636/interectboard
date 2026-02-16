@@ -1,9 +1,8 @@
-import React,{useRef, useEffect}from 'react'
-import { Link } from "react-router-dom";
+import React, { useRef, useEffect } from 'react'
+import { Link } from "react-router-dom"
 
 export default function FullBoard(props) {
-
-    const canvasRef = useRef(null);
+  const canvasRef = useRef(null)
 
     useEffect(() => {
         const root = canvasRef.current;

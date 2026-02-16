@@ -5,12 +5,11 @@ import Footer from './components/Footer'
 import Catalog from './components/Catalog'
 import FullBoard from './components/FullBoard'
 
-export const SerchContent = createContext(null)
+export const SearchContext = createContext(null)
 
 function App() {
-
-    // header and footer
-  const[active, setActive] = useState(0)
+  // Header and footer active state
+  const [active, setActive] = useState(0)
 
   const showActive = (index) => {
     setActive(index)
@@ -18,21 +17,19 @@ function App() {
 
 
 
-// filter category
+  // Filter category
   const [activeFilter, setActiveFilter] = useState(0)
-  
-  
-  
-// sort category
-  const sotrName = [
+
+  // Sort options
+  const sortOptions = [
       { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
       { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
       { sortBy: 'rating', order: 'asc', label: 'возрастанию рейтинга' },
       { sortBy: 'rating', order: 'desc', label: 'убыванию рейтинга' },
   ]
 
-  const [showSort, setShowSort] = useState(sotrName[0].label)
-  const [showSortId, setShowSortId] = useState(sotrName[0])
+  const [showSort, setShowSort] = useState(sortOptions[0].label)
+  const [showSortId, setShowSortId] = useState(sortOptions[0])
   const [showDisplay, setShowDisplay] = useState(false)
   const showList = (name) => {
       setShowSort(name.label)
@@ -41,21 +38,20 @@ function App() {
   }
 
 
-// get active board before click to card
+  // Get active board before click to card
   const [getBoard, setGetBoard] = useState(null)
   const showBoard = (board) => {
-      setGetBoard(board);
+    setGetBoard(board)
   }
 
-
-  // search controled
-  
+  // Search controlled
   const [search, setSearch] = useState('')
 
 
   const [page, setPage] = useState(1)
-  // mockapi
-  const [catalog, setCatalog] = useState([]);
+
+  // MockAPI data
+  const [catalog, setCatalog] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -99,36 +95,37 @@ function App() {
 
   return (
     <div className="App">
-      <SerchContent.Provider value={{search, setSearch}} >
-      <Header
-        showActive={showActive}
-        active={active}
+      <SearchContext.Provider value={{search, setSearch}}>
+        <Header
+          showActive={showActive}
+          active={active}
         />
-      <Routes>
-        <Route 
-          path="/interectboard" 
-          element={
-            <Catalog 
-              catalog={catalog} 
-              isLoading={isLoading} 
-              setActiveFilter={setActiveFilter}
-              activeFilter={activeFilter}
-              sotrName={sotrName}
-              showList={showList}
-              setShowDisplay={setShowDisplay}
-              showDisplay={showDisplay}
-              showSort={showSort}
-              showBoard={showBoard}
-              setPage={setPage}
-            />
-          } 
-        />        
-        <Route path="/board/:boardId" element={
-          <FullBoard board={getBoard}/>} 
-        />
-      </Routes> 
-      <Footer showActive={showActive} active={active}/>
-      </SerchContent.Provider>
+        <Routes>
+          <Route
+            path="/interectboard"
+            element={
+              <Catalog
+                catalog={catalog}
+                isLoading={isLoading}
+                setActiveFilter={setActiveFilter}
+                activeFilter={activeFilter}
+                sortOptions={sortOptions}
+                showList={showList}
+                setShowDisplay={setShowDisplay}
+                showDisplay={showDisplay}
+                showSort={showSort}
+                showBoard={showBoard}
+                setPage={setPage}
+              />
+            }
+          />
+          <Route
+            path="/board/:boardId"
+            element={<FullBoard board={getBoard} />}
+          />
+        </Routes>
+        <Footer showActive={showActive} active={active} />
+      </SearchContext.Provider>
     </div>
   );
 }
