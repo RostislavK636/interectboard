@@ -5,15 +5,8 @@ import Pagination from './Pagination/index.js'
 
 export default function Catalog(props) {
 
-    const pizzas = props.catalog
-    // .filter((catalog) => {
-    //     if (catalog.title.toLowerCase().includes(props.search.toLowerCase())) {
-    //         return true;
-    //     } return })
-        .map((catalog) => <Border key={catalog.id} catalog={catalog} 
-                                                    showBoard={props.showBoard} 
-                                                    search={props.Search} 
-                                                    setSearch={props.setSearch}/>)
+    const pizzas = props.catalog.map((catalog) => <Border key={catalog.id} catalog={catalog} 
+                                                    showBoard={props.showBoard} />)
     return(
         <>
         <h1>Каталог всех досупных досок</h1>

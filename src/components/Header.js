@@ -12,7 +12,7 @@ export default function Header(props) {
             <img src='https://cdn-icons-png.flaticon.com/512/10134/10134831.png' alt='logo'/>
         </div>
 
-        <Search search={props.search} setSearch={props.setSearch}/>
+        <Search />
 
         <ul className='nav'>
             <li className={props.active === 0 ? 'active' : 'null'} onClick={() => {props.showActive(0)}}>Главная</li>

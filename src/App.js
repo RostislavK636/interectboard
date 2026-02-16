@@ -1,9 +1,11 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState, createContext} from 'react'
 import {Routes, Route } from "react-router-dom";
 import Header from './components/Header'
 import Footer from './components/Footer' 
 import Catalog from './components/Catalog'
 import FullBoard from './components/FullBoard'
+
+export const SerchContent = createContext(null)
 
 function App() {
 
@@ -47,6 +49,7 @@ function App() {
 
 
   // search controled
+  
   const [search, setSearch] = useState('')
 
 
@@ -72,11 +75,10 @@ function App() {
 
   return (
     <div className="App">
+      <SerchContent.Provider value={{search, setSearch}} >
       <Header
         showActive={showActive}
         active={active}
-        search={search}
-        setSearch={setSearch}
         />
       <Routes>
         <Route 
@@ -93,7 +95,6 @@ function App() {
               showDisplay={showDisplay}
               showSort={showSort}
               showBoard={showBoard}
-              search={search}
               setPage={setPage}
             />
           } 
@@ -102,10 +103,8 @@ function App() {
           <FullBoard board={getBoard}/>} 
         />
       </Routes> 
-      
-  
-      
       <Footer showActive={showActive} active={active}/>
+      </SerchContent.Provider>
     </div>
   );
 }

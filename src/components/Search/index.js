@@ -1,8 +1,10 @@
 import React from 'react'
 import style from './Search.module.scss'
 import { CiSearch } from "react-icons/ci";
+import {SerchContent} from '../../App'
 
-export default function Search({search, setSearch}) {
+export default function Search() {
+  const {search, setSearch} = React.useContext(SerchContent)
   return (
     <>
         <div className={style.root}>
