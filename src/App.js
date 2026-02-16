@@ -1,101 +1,104 @@
-import React, { useEffect, useState, createContext} from 'react'
-import {Routes, Route } from "react-router-dom";
+import React, { useEffect, useState, createContext } from 'react'
+import { Routes, Route } from "react-router-dom"
+import { useSelector, useDispatch } from 'react-redux'
+import { setActiveFilter, setActiveSort, setPage } from './redux/slices/filterSlice'
+import axios from 'axios'
 import Header from './components/Header'
 import Footer from './components/Footer' 
 import Catalog from './components/Catalog'
 import FullBoard from './components/FullBoard'
 
+
 export const SearchContext = createContext(null)
 
 function App() {
-  // Header and footer active state
-  const [active, setActive] = useState(0)
+  // Redux
+  const activeFilter = useSelector(state => state.filter.activeFilter)
+  const activeSort = useSelector(state => state.filter.activeSort)
+  const page = useSelector(state => state.filter.page)
+  const dispatch = useDispatch()
 
+  // Local State
+  const [active, setActive] = useState(0)
+  const [search, setSearch] = useState('')
+  const [showDisplay, setShowDisplay] = useState(false)
+  const [getBoard, setGetBoard] = useState(null)
+  const [catalog, setCatalog] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
+
+  // Handlers
   const showActive = (index) => {
     setActive(index)
   }
 
-
-
-  // Filter category
-  const [activeFilter, setActiveFilter] = useState(0)
-
-  // Sort options
-  const sortOptions = [
-      { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
-      { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
-      { sortBy: 'rating', order: 'asc', label: 'возрастанию рейтинга' },
-      { sortBy: 'rating', order: 'desc', label: 'убыванию рейтинга' },
-  ]
-
-  const [showSort, setShowSort] = useState(sortOptions[0].label)
-  const [showSortId, setShowSortId] = useState(sortOptions[0])
-  const [showDisplay, setShowDisplay] = useState(false)
-  const showList = (name) => {
-      setShowSort(name.label)
-      setShowSortId(name)
-      setShowDisplay(false)
+  const handleSetActiveFilter = (value) => {
+    dispatch(setActiveFilter(value))
   }
 
+  const handleShowList = (sortOption) => {
+    dispatch(setActiveSort(sortOption))
+    setShowDisplay(false)
+  }
 
-  // Get active board before click to card
-  const [getBoard, setGetBoard] = useState(null)
+  const handlSetPage = (num) => {
+    dispatch(setPage(num))
+  }
+
   const showBoard = (board) => {
     setGetBoard(board)
   }
 
-  // Search controlled
-  const [search, setSearch] = useState('')
-
-
-  const [page, setPage] = useState(1)
-
-  // MockAPI data
-  const [catalog, setCatalog] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-
+  // API Fetch
   useEffect(() => {
     setIsLoading(true)
+    setHasError(false)
     
     const params = new URLSearchParams()
-    
-    // Всегда добавляем лимит
     params.append('l', 3)
-    
-    // Поиск только если есть текст
+    params.append('p', page)
+
     if (search) {
       params.append('search', search)
     }
     
-    // Сортировка - добавляем только если выбрана
-    if (showSortId?.sortBy && showSortId?.order) {
-      params.append('sortBy', showSortId.sortBy)
-      params.append('order', showSortId.order)
+    if (activeSort?.sortBy && activeSort?.order) {
+      params.append('sortBy', activeSort.sortBy)
+      params.append('order', activeSort.order)
     }
-    
-    // В зависимости от фильтра добавляем разные параметры
+
     if (activeFilter !== 0) {
       params.append('category', activeFilter)
     }
     
     const url = `https://698e3096aded595c25314dea.mockapi.io/boards?${params}`
-    
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setCatalog(data)
+
+    axios.get(url)
+      .then(response => {
+        setCatalog(response.data)
         setIsLoading(false)
+        setHasError(false)
       })
       .catch((error) => {
         console.error('Ошибка запроса:', error)
+        setCatalog([])
         setIsLoading(false)
+        setHasError(true)
       })
-  }, [activeFilter, showSortId, search, page])
 
+  }, [activeFilter, activeSort, search, page])
+
+  // Sort Options
+  const sortOptions = [
+    { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
+    { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
+    { sortBy: 'rating', order: 'asc', label: 'возрастанию рейтинга' },
+    { sortBy: 'rating', order: 'desc', label: 'убыванию рейтинга' },
+  ]
 
   return (
     <div className="App">
-      <SearchContext.Provider value={{search, setSearch}}>
+      <SearchContext.Provider value={{ search, setSearch }}>
         <Header
           showActive={showActive}
           active={active}
@@ -107,15 +110,16 @@ function App() {
               <Catalog
                 catalog={catalog}
                 isLoading={isLoading}
-                setActiveFilter={setActiveFilter}
+                hasError={hasError}
+                setActiveFilter={handleSetActiveFilter}
                 activeFilter={activeFilter}
                 sortOptions={sortOptions}
-                showList={showList}
+                showList={handleShowList}
                 setShowDisplay={setShowDisplay}
                 showDisplay={showDisplay}
-                showSort={showSort}
+                showSort={activeSort.label}
                 showBoard={showBoard}
-                setPage={setPage}
+                setPage={handlSetPage}
               />
             }
           />
@@ -127,7 +131,7 @@ function App() {
         <Footer showActive={showActive} active={active} />
       </SearchContext.Provider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

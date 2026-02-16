@@ -4,7 +4,7 @@ import Border from './BorderBlock/index.js'
 import Pagination from './Pagination/index.js'
 
 export default function Catalog(props) {
-  const boards = Array.isArray(props.catalog)
+  const boards = Array.isArray(props.catalog) && props.catalog.length > 0
     ? props.catalog.map(catalog => (
         <Border
           key={catalog.id}
