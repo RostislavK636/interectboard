@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/interectboard/static/css/main.a0607a92.css",
-    "main.js": "/interectboard/static/js/main.6b9aeee2.js",
+    "main.js": "/interectboard/static/js/main.e3f02f87.js",
     "index.html": "/interectboard/index.html",
     "main.a0607a92.css.map": "/interectboard/static/css/main.a0607a92.css.map",
-    "main.6b9aeee2.js.map": "/interectboard/static/js/main.6b9aeee2.js.map"
+    "main.e3f02f87.js.map": "/interectboard/static/js/main.e3f02f87.js.map"
   },
   "entrypoints": [
     "static/css/main.a0607a92.css",
-    "static/js/main.6b9aeee2.js"
+    "static/js/main.e3f02f87.js"
   ]
 }
