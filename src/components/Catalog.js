@@ -4,6 +4,8 @@ import Border from './BorderBlock/index.js'
 import Pagination from './Pagination/index.js'
 
 export default function Catalog(props) {
+  const { setShowDisplay } = props
+  
   const boards = Array.isArray(props.catalog) && props.catalog.length > 0
     ? props.catalog.map(catalog => (
         <Border
@@ -13,6 +15,21 @@ export default function Catalog(props) {
         />
       ))
     : <h2>По вашему запросу ничего не найдено</h2>
+
+  const sortRef = React.useRef()
+
+  React.useEffect(() => {
+    const handlClickOutside = (event) => {
+      if(!event.composedPath().includes(sortRef.current)){
+        setShowDisplay(false);
+      }
+    }
+    document.body.addEventListener('click', handlClickOutside)
+
+    return () => {
+      document.body.removeEventListener('click', handlClickOutside)
+    }
+  }, [setShowDisplay])
 
   return (
     <>
@@ -28,9 +45,9 @@ export default function Catalog(props) {
           <li className={props.activeFilter === 5 ? 'active-filter' : 'null'} onClick={() => {props.setActiveFilter(5)}}>Программирование</li>
         </ul>
 
-        <p>Сортировка по <button className='btn-sort' onClick={() => {props.setShowDisplay(!props.showDisplay)}}>{props.showSort}</button>▾</p>
+        <p ref={sortRef}>Сортировка по <button className='btn-sort' onClick={() => {setShowDisplay(!props.showDisplay)}}>{props.showSort}</button>▾</p>
 
-        <div className={props.showDisplay ? 'sort-list-on' : 'sort-list-off'}>
+        <div ref={sortRef} className={props.showDisplay ? 'sort-list-on' : 'sort-list-off'}>
           <ul>
             <li onClick={() => {props.showList(props.sortOptions[0])}}>{props.sortOptions[0].label}</li>
             <li onClick={() => {props.showList(props.sortOptions[1])}}>{props.sortOptions[1].label}</li>
