@@ -45,15 +45,17 @@ export default function Catalog(props) {
           <li className={props.activeFilter === 5 ? 'active-filter' : 'null'} onClick={() => {props.setActiveFilter(5)}}>Программирование</li>
         </ul>
 
-        <p ref={sortRef}>Сортировка по <button className='btn-sort' onClick={() => {setShowDisplay(!props.showDisplay)}}>{props.showSort}</button>▾</p>
+        <div ref={sortRef}>
+          <p>Сортировка по <button className='btn-sort' onClick={() => {setShowDisplay(!props.showDisplay)}}>{props.showSort}</button>▾</p>
 
-        <div ref={sortRef} className={props.showDisplay ? 'sort-list-on' : 'sort-list-off'}>
-          <ul>
-            <li onClick={() => {props.showList(props.sortOptions[0])}}>{props.sortOptions[0].label}</li>
-            <li onClick={() => {props.showList(props.sortOptions[1])}}>{props.sortOptions[1].label}</li>
-            <li onClick={() => {props.showList(props.sortOptions[2])}}>{props.sortOptions[2].label}</li>
-            <li onClick={() => {props.showList(props.sortOptions[3])}}>{props.sortOptions[3].label}</li>
-          </ul>
+          <div className={props.showDisplay ? 'sort-list-on' : 'sort-list-off'}>
+            <ul>
+              <li onClick={() => {props.showList(props.sortOptions[0])}}>{props.sortOptions[0].label}</li>
+              <li onClick={() => {props.showList(props.sortOptions[1])}}>{props.sortOptions[1].label}</li>
+              <li onClick={() => {props.showList(props.sortOptions[2])}}>{props.sortOptions[2].label}</li>
+              <li onClick={() => {props.showList(props.sortOptions[3])}}>{props.sortOptions[3].label}</li>
+            </ul>
+          </div>
         </div>
       </div>
 
