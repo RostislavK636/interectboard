@@ -6,23 +6,28 @@ import { IoMdClose } from "react-icons/io";
 import { SearchContext } from '../../App'
 
 export default function Search() {
-  const {setSearch } = React.useContext(SearchContext)
-  const [value, setValue] = React.useState('')
+  const { search, handlSetSearch } = React.useContext(SearchContext)
+  const [value, setValue] = React.useState(search || '')
   const [activeInput, setActiveInput] = React.useState(false)
-  const inputRef = React.useRef() 
+  const inputRef = React.useRef()
+
+  // Синхронизируем input с Redux state при изменении
+  React.useEffect(() => {
+    setValue(search || '')
+  }, [search]) 
 
   const clickInput = () => {
     setActiveInput(false)
-    setSearch('')
+    handlSetSearch('')
     setValue('')
     inputRef.current.focus()
   }
 
   const updateInput = React.useMemo(() =>
     debounce((str) => {
-      setSearch(str)
+      handlSetSearch(str)
     }, 1000),
-    [setSearch],
+    [handlSetSearch],
   )
 
   const changInput = (event) =>{

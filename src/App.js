@@ -1,26 +1,28 @@
-import React, { useEffect, useState, createContext } from 'react'
-import { Routes, Route } from "react-router-dom"
+import React, { useEffect, useState, createContext, useRef, useCallback } from 'react'
+import { Routes, Route, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
-import { setActiveFilter, setActiveSort, setPage } from './redux/slices/filterSlice'
+import { setActiveFilter, setActiveSort, setPage, setSearch, setFilters } from './redux/slices/filterSlice'
 import axios from 'axios'
+import qs from 'qs'  
 import Header from './components/Header'
 import Footer from './components/Footer' 
 import Catalog from './components/Catalog'
 import FullBoard from './components/FullBoard'
 
-
 export const SearchContext = createContext(null)
 
 function App() {
+  const nav = useNavigate()
+  
   // Redux
   const activeFilter = useSelector(state => state.filter.activeFilter)
   const activeSort = useSelector(state => state.filter.activeSort)
   const page = useSelector(state => state.filter.page)
+  const search = useSelector(state => state.filter.search)
   const dispatch = useDispatch()
 
-  // Local State
+  // Local state
   const [active, setActive] = useState(0)
-  const [search, setSearch] = useState('')
   const [showDisplay, setShowDisplay] = useState(false)
   const [getBoard, setGetBoard] = useState(null)
   const [catalog, setCatalog] = useState([])
@@ -45,12 +47,20 @@ function App() {
     dispatch(setPage(num))
   }
 
+  const handlSetSearch = (str) => {
+    dispatch(setSearch(str))
+  }
+
   const showBoard = (board) => {
     setGetBoard(board)
   }
 
-  // API Fetch
-  useEffect(() => {
+  // Flags to prevent duplicate API calls on mount
+  const isSearch = useRef(false)   
+  const isMounted = useRef(false)
+
+  // Fetch boards from API
+  const getApi = useCallback(() => {
     setIsLoading(true)
     setHasError(false)
     
@@ -72,7 +82,6 @@ function App() {
     }
     
     const url = `https://698e3096aded595c25314dea.mockapi.io/boards?${params}`
-
     axios.get(url)
       .then(response => {
         setCatalog(response.data)
@@ -85,10 +94,43 @@ function App() {
         setIsLoading(false)
         setHasError(true)
       })
+  }, [page, search, activeSort, activeFilter])
 
-  }, [activeFilter, activeSort, search, page])
+  // Call API when filters change
+  useEffect(() => {
+    if (!isSearch.current) {
+      window.scroll(0, 0)
+      getApi()
+    }
+    isSearch.current = false
+  }, [activeFilter, activeSort, search, page, getApi])
 
-  // Sort Options
+  // Restore state from URL on mount
+  useEffect(() => {
+    if (window.location.search) {
+      const param = qs.parse(window.location.search.substring(1)) 
+      dispatch(setFilters(param))
+    }
+    isSearch.current = true
+  }, [dispatch])
+
+  // Save state to URL when filters change
+  useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        filter: activeFilter,
+        sortBy: activeSort.sortBy,
+        order: activeSort.order,
+        label: activeSort.label,
+        page,
+        search
+      })
+      nav(`?${queryString}`)
+    }
+    isMounted.current = true
+  }, [activeFilter, activeSort, page, search,nav])
+
+  // Sort options
   const sortOptions = [
     { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
     { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
@@ -98,7 +140,7 @@ function App() {
 
   return (
     <div className="App">
-      <SearchContext.Provider value={{ search, setSearch }}>
+      <SearchContext.Provider value={{ search, handlSetSearch }}>
         <Header
           showActive={showActive}
           active={active}
@@ -133,5 +175,7 @@ function App() {
     </div>
   )
 }
+
+
 
 export default App

@@ -8,7 +8,8 @@ const initialState = {
     sortBy: 'createdAt',
     order: 'asc',
     label: 'возрастанию даты'
-  }
+  },
+  search: ''
 }
 
 // Slice
@@ -26,6 +27,19 @@ export const filterSlice = createSlice({
 
     setPage(state,action) {
       state.page = action.payload
+    },
+    setSearch(state,action) {
+      state.search = action.payload
+    },
+    setFilters(state, action){
+      state.page = parseInt(action.payload.page) || 1
+      state.activeFilter = parseInt(action.payload.activeFilter) || 0
+      state.activeSort = {
+        sortBy: action.payload.sortBy || 'createdAt',
+        order: action.payload.order || 'asc',
+        label: action.payload.label || 'возрастанию даты'
+      }
+      state.search = action.payload.search || ''
     }
   },
 })
@@ -34,7 +48,9 @@ export const filterSlice = createSlice({
 export const { 
   setActiveFilter,
   setActiveSort,
-  setPage
+  setPage,
+  setFilters,
+  setSearch
 } = filterSlice.actions
 
 // Export
