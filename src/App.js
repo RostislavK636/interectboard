@@ -1,13 +1,13 @@
 import React, { useEffect, useState, createContext, useRef, useCallback } from 'react'
 import { Routes, Route, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
-import { setActiveFilter, setActiveSort, setPage, setSearch, setFilters } from './redux/slices/filterSlice'
+import { setActiveFilter, setPage, setSearch, setFilters } from './redux/slices/filterSlice'
 import axios from 'axios'
 import qs from 'qs'  
 import Header from './components/Header'
 import Footer from './components/Footer' 
-import Catalog from './components/Catalog'
 import FullBoard from './components/FullBoard'
+import Home from './page/Home'
 
 export const SearchContext = createContext(null)
 
@@ -23,7 +23,6 @@ function App() {
 
   // Local state
   const [active, setActive] = useState(0)
-  const [showDisplay, setShowDisplay] = useState(false)
   const [getBoard, setGetBoard] = useState(null)
   const [catalog, setCatalog] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -36,11 +35,6 @@ function App() {
 
   const handleSetActiveFilter = (value) => {
     dispatch(setActiveFilter(value))
-  }
-
-  const handleShowList = (sortOption) => {
-    dispatch(setActiveSort(sortOption))
-    setShowDisplay(false)
   }
 
   const handlSetPage = (num) => {
@@ -130,13 +124,6 @@ function App() {
     isMounted.current = true
   }, [activeFilter, activeSort, page, search,nav])
 
-  // Sort options
-  const sortOptions = [
-    { sortBy: 'createdAt', order: 'asc', label: 'возрастанию даты' },
-    { sortBy: 'createdAt', order: 'desc', label: 'убыванию даты' },
-    { sortBy: 'rating', order: 'asc', label: 'возрастанию рейтинга' },
-    { sortBy: 'rating', order: 'desc', label: 'убыванию рейтинга' },
-  ]
 
   return (
     <div className="App">
@@ -149,16 +136,12 @@ function App() {
           <Route
             path="/interectboard"
             element={
-              <Catalog
+              <Home
                 catalog={catalog}
                 isLoading={isLoading}
                 hasError={hasError}
                 setActiveFilter={handleSetActiveFilter}
                 activeFilter={activeFilter}
-                sortOptions={sortOptions}
-                showList={handleShowList}
-                setShowDisplay={setShowDisplay}
-                showDisplay={showDisplay}
                 showSort={activeSort.label}
                 showBoard={showBoard}
                 setPage={handlSetPage}
