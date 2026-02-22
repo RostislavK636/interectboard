@@ -1,24 +1,55 @@
-import React from 'react'
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 import { FcLike } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, removeItems } from "../../redux/slices/cardSlice";
 
 export default function BoardCard({ catalog, showBoard }) {
-  const [like, setLike] = React.useState(false)
-  
-  if (!catalog) return null;
-  // const isLike = (like ? <CiHeart className='like-board' onClick={() => {setLike(!like)}}/> : <FcLike />)
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.card.items);
 
+  if (!catalog) return null;
+
+  const { id, image, title, description, createdAt } = catalog;
+  const like = items.some((item) => item.id === id);
+
+  const onClickRemove = () => {
+    dispatch(removeItems(id));
+  };
+
+  const onClickAdd = () => {
+    const item = {
+      id,
+      image,
+      title,
+      description,
+    };
+    dispatch(addItem(item));
+  };
   return (
     <div className='card-board'>
-      <img src={catalog.image} alt={catalog.title} />
-      {like ? <FcLike className='like-board' onClick={() => setLike(false)}/> : <CiHeart className='like-board' onClick={() => setLike(true)}/>}
-      <h3>{catalog.title}</h3>
-      <p className='desc'>{catalog.description}</p>
-      <p><b>{catalog.createdAt}</b></p>
-      <Link to={`/board/${catalog.id}`}>
-        <button className='btn-card' onClick={() => {showBoard(catalog)}}>Перейти</button>
+      <img src={image} alt={title} />
+      {like ? (
+        <FcLike className='like-board' onClick={onClickRemove} />
+      ) : (
+        <CiHeart onClick={onClickAdd} className='like-board' />
+      )}
+      <h3>{title}</h3>
+      <p className='desc'>{description}</p>
+      <p>
+        <b>{createdAt}</b>
+      </p>
+      <Link to={`/board/${id}`}>
+        <button
+          className='btn-card'
+          onClick={() => {
+            showBoard(catalog);
+          }}
+        >
+          Перейти
+        </button>
       </Link>
     </div>
-  )
+  );
 }
