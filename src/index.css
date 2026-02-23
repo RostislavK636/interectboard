@@ -169,6 +169,7 @@ ul {
   right: 30px;
   font-size: 2rem;
   opacity: 0.8;
+  cursor: pointer;
 }
 
 .card-board h3 {

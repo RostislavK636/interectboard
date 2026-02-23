@@ -13,7 +13,7 @@ import {
   setSearch,
   setFilters,
 } from "./redux/slices/filterSlice";
-import axios from "axios";
+import { fetchBoards } from "./redux/slices/BorderSlice.js";
 import qs from "qs";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -31,14 +31,15 @@ function App() {
   const activeSort = useSelector((state) => state.filter.activeSort);
   const page = useSelector((state) => state.filter.page);
   const search = useSelector((state) => state.filter.search);
+  const { borders, status } = useSelector((state) => state.border);
   const dispatch = useDispatch();
 
   // Local state
   const [active, setActive] = useState(0);
   const [getBoard, setGetBoard] = useState(null);
-  const [catalog, setCatalog] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const isLoading = status === "loading";
+  const hasError = status === "error";
+  const catalog = borders;
 
   // Handlers
   const showActive = (index) => {
@@ -67,41 +68,15 @@ function App() {
 
   // Fetch boards from API
   const getApi = useCallback(() => {
-    setIsLoading(true);
-    setHasError(false);
-
-    const params = new URLSearchParams();
-    params.append("l", 3);
-    params.append("p", page);
-
-    if (search) {
-      params.append("search", search);
-    }
-
-    if (activeSort?.sortBy && activeSort?.order) {
-      params.append("sortBy", activeSort.sortBy);
-      params.append("order", activeSort.order);
-    }
-
-    if (activeFilter !== 0) {
-      params.append("category", activeFilter);
-    }
-
-    const url = `https://698e3096aded595c25314dea.mockapi.io/boards?${params}`;
-    axios
-      .get(url)
-      .then((response) => {
-        setCatalog(response.data);
-        setIsLoading(false);
-        setHasError(false);
-      })
-      .catch((error) => {
-        console.error("Ошибка запроса:", error);
-        setCatalog([]);
-        setIsLoading(false);
-        setHasError(true);
-      });
-  }, [page, search, activeSort, activeFilter]);
+    dispatch(
+      fetchBoards({
+        page,
+        search,
+        activeSort,
+        activeFilter,
+      }),
+    );
+  }, [activeFilter, activeSort, search, page, dispatch]);
 
   // Call API when filters change
   useEffect(() => {
