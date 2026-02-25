@@ -62,6 +62,8 @@ export const borderSlice = createSlice({
   },
 });
 
+export const selectBorder = (state) => state.border;
+
 // Actions
 export const { getBoard } = borderSlice.actions;
 

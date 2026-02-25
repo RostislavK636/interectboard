@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, removeItems } from "../../redux/slices/cardSlice";
+import { addItem, removeItems, selectCard } from "../../redux/slices/cardSlice";
 
 export default function BoardCard({ catalog, showBoard }) {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.card.items);
+  const { items } = useSelector(selectCard);
 
   if (!catalog) return null;
 

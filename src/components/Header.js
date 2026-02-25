@@ -2,10 +2,11 @@ import React from "react";
 import Search from "./Search/index.js";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { selectCard } from "../redux/slices/cardSlice.js";
 
 export default function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const items = useSelector((state) => state.card.items);
+  const { items } = useSelector(selectCard);
   return (
     <div className='header-div'>
       <div className='logo-div'>

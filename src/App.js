@@ -1,19 +1,13 @@
-import React, {
-  useEffect,
-  useState,
-  createContext,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setActiveFilter,
   setPage,
-  setSearch,
   setFilters,
+  selectFilter,
 } from "./redux/slices/filterSlice";
-import { fetchBoards } from "./redux/slices/BorderSlice.js";
+import { fetchBoards, selectBorder } from "./redux/slices/BorderSlice.js";
 import qs from "qs";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -21,17 +15,12 @@ import FullBoard from "./components/FullBoard";
 import Home from "./page/Home";
 import Favourites from "./page/Favourites.js";
 
-export const SearchContext = createContext(null);
-
 function App() {
   const nav = useNavigate();
 
   // Redux
-  const activeFilter = useSelector((state) => state.filter.activeFilter);
-  const activeSort = useSelector((state) => state.filter.activeSort);
-  const page = useSelector((state) => state.filter.page);
-  const search = useSelector((state) => state.filter.search);
-  const { borders, status } = useSelector((state) => state.border);
+  const { activeFilter, activeSort, page, search } = useSelector(selectFilter);
+  const { borders, status } = useSelector(selectBorder);
   const dispatch = useDispatch();
 
   // Local state
@@ -52,10 +41,6 @@ function App() {
 
   const handlSetPage = (num) => {
     dispatch(setPage(num));
-  };
-
-  const handlSetSearch = (str) => {
-    dispatch(setSearch(str));
   };
 
   const showBoard = (board) => {
@@ -114,35 +99,33 @@ function App() {
 
   return (
     <div className='App'>
-      <SearchContext.Provider value={{ search, handlSetSearch }}>
-        <Header showActive={showActive} active={active} />
-        <Routes>
-          <Route
-            path='/interectboard'
-            element={
-              <Home
-                catalog={catalog}
-                isLoading={isLoading}
-                hasError={hasError}
-                setActiveFilter={handleSetActiveFilter}
-                activeFilter={activeFilter}
-                showSort={activeSort.label}
-                showBoard={showBoard}
-                setPage={handlSetPage}
-              />
-            }
-          />
-          <Route
-            path='/board/:boardId'
-            element={<FullBoard board={getBoard} />}
-          />
-          <Route
-            path='/interectboard/favourites'
-            element={<Favourites showBoard={showBoard} />}
-          />
-        </Routes>
-        <Footer showActive={showActive} active={active} />
-      </SearchContext.Provider>
+      <Header showActive={showActive} active={active} />
+      <Routes>
+        <Route
+          path='/interectboard'
+          element={
+            <Home
+              catalog={catalog}
+              isLoading={isLoading}
+              hasError={hasError}
+              setActiveFilter={handleSetActiveFilter}
+              activeFilter={activeFilter}
+              showSort={activeSort.label}
+              showBoard={showBoard}
+              setPage={handlSetPage}
+            />
+          }
+        />
+        <Route
+          path='/board/:boardId'
+          element={<FullBoard board={getBoard} />}
+        />
+        <Route
+          path='/interectboard/favourites'
+          element={<Favourites showBoard={showBoard} />}
+        />
+      </Routes>
+      <Footer showActive={showActive} active={active} />
     </div>
   );
 }
