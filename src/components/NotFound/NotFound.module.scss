@@ -1,0 +1,9 @@
+.root {
+  text-align: center;
+  margin-block: 50px;
+}
+@media (max-width: 700px) {
+  .root {
+    font-size: 0.8rem;
+  }
+}

@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import FullBoard from "./components/FullBoard";
 import Home from "./page/Home";
 import Favourites from "./page/Favourites.js";
+import NotFound from "./components/NotFound/index.js";
 
 function App() {
   const nav = useNavigate();
@@ -25,7 +26,6 @@ function App() {
 
   // Local state
   const [active, setActive] = useState(0);
-  const [getBoard, setGetBoard] = useState(null);
   const isLoading = status === "loading";
   const hasError = status === "error";
   const catalog = borders;
@@ -41,10 +41,6 @@ function App() {
 
   const handlSetPage = (num) => {
     dispatch(setPage(num));
-  };
-
-  const showBoard = (board) => {
-    setGetBoard(board);
   };
 
   // Flags to prevent duplicate API calls on mount
@@ -111,19 +107,13 @@ function App() {
               setActiveFilter={handleSetActiveFilter}
               activeFilter={activeFilter}
               showSort={activeSort.label}
-              showBoard={showBoard}
               setPage={handlSetPage}
             />
           }
         />
-        <Route
-          path='/board/:boardId'
-          element={<FullBoard board={getBoard} />}
-        />
-        <Route
-          path='/interectboard/favourites'
-          element={<Favourites showBoard={showBoard} />}
-        />
+        <Route path='/interectboard/board/:boardId' element={<FullBoard />} />
+        <Route path='/interectboard/favourites' element={<Favourites />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer showActive={showActive} active={active} />
     </div>

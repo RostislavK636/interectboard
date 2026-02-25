@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Footer(props) {
+  const location = useLocation();
   return (
     <div className='footer'>
       <div className='contact'>
@@ -36,16 +37,19 @@ export default function Footer(props) {
           >
             О нас
           </li>
-          <Link to='/interectboard/favourites' className='fovourite'>
-            <li
-              className={`fovourite-li ${props.active === 2 ? "active" : "null"}`}
-              onClick={() => {
-                props.showActive(2);
-              }}
-            >
-              Избранное
-            </li>
-          </Link>
+          {location.pathname !== "/interectboard/favourites" ? (
+            <Link to='/interectboard/favourites' className='fovourite'>
+              <li
+                className={`fovourite-li ${props.active === 2 ? "active" : "null"}`}
+                onClick={() => {
+                  props.showActive(2);
+                }}
+              >
+                Избранное
+              </li>
+            </Link>
+          ) : null}
+
           <li
             className={props.active === 3 ? "active" : "null"}
             onClick={() => {

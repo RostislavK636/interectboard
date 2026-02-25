@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeItems } from "../../redux/slices/cardSlice";
 
-export default function FavouriteCard({ catalog, showBoard }) {
+export default function FavouriteCard({ catalog }) {
   const dispatch = useDispatch();
 
   const removeBoard = () => {
@@ -21,14 +21,7 @@ export default function FavouriteCard({ catalog, showBoard }) {
         </div>
         <FcLike className={style.heart} onClick={removeBoard} />
         <Link to={`/board/${catalog.id}`}>
-          <button
-            className='btn-card'
-            onClick={() => {
-              showBoard(catalog);
-            }}
-          >
-            Перейти
-          </button>
+          <button className='btn-card'>Перейти</button>
         </Link>
       </div>
     </>

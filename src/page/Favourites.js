@@ -2,18 +2,14 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FavouriteCard from "../components/FavouriteCard/index";
 import { CgSmileSad } from "react-icons/cg";
-import { selectBorder } from "../redux/slices/BorderSlice";
+import { selectCard } from "../redux/slices/cardSlice";
 
 export default function Favourites(props) {
-  const { items } = useSelector(selectBorder);
+  const { items } = useSelector(selectCard);
   const board =
     items.length > 0 ? (
       items.map((catalog) => (
-        <FavouriteCard
-          key={catalog.id}
-          catalog={catalog}
-          showBoard={props.showBoard}
-        />
+        <FavouriteCard key={catalog.id} catalog={catalog} />
       ))
     ) : (
       <div style={{ color: "#5c45df" }}>

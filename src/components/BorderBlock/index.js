@@ -5,7 +5,7 @@ import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItems, selectCard } from "../../redux/slices/cardSlice";
 
-export default function BoardCard({ catalog, showBoard }) {
+export default function BoardCard({ catalog }) {
   const dispatch = useDispatch();
   const { items } = useSelector(selectCard);
 
@@ -40,15 +40,8 @@ export default function BoardCard({ catalog, showBoard }) {
       <p>
         <b>{createdAt}</b>
       </p>
-      <Link to={`/board/${id}`}>
-        <button
-          className='btn-card'
-          onClick={() => {
-            showBoard(catalog);
-          }}
-        >
-          Перейти
-        </button>
+      <Link to={`/interectboard/board/${id}`}>
+        <button className='btn-card'>Перейти</button>
       </Link>
     </div>
   );
