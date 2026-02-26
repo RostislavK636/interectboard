@@ -1,7 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-export default function Footer(props) {
+interface HeaderProps {
+  active: number;
+  showActive: (value: number) => void;
+}
+
+export default function Footer({ active, showActive }: HeaderProps) {
   const location = useLocation();
   return (
     <div className='footer'>
@@ -21,18 +26,18 @@ export default function Footer(props) {
         <ul className='tab-ul'>
           <Link to='/interectboard'>
             <li
-              className={props.active === 0 ? "active" : "null"}
+              className={active === 0 ? "active" : "null"}
               onClick={() => {
-                props.showActive(0);
+                showActive(0);
               }}
             >
               Главная
             </li>
           </Link>
           <li
-            className={props.active === 1 ? "active" : "null"}
+            className={active === 1 ? "active" : "null"}
             onClick={() => {
-              props.showActive(1);
+              showActive(1);
             }}
           >
             О нас
@@ -40,9 +45,9 @@ export default function Footer(props) {
           {location.pathname !== "/interectboard/favourites" ? (
             <Link to='/interectboard/favourites' className='fovourite'>
               <li
-                className={`fovourite-li ${props.active === 2 ? "active" : "null"}`}
+                className={`fovourite-li ${active === 2 ? "active" : "null"}`}
                 onClick={() => {
-                  props.showActive(2);
+                  showActive(2);
                 }}
               >
                 Избранное
@@ -51,9 +56,9 @@ export default function Footer(props) {
           ) : null}
 
           <li
-            className={props.active === 3 ? "active" : "null"}
+            className={active === 3 ? "active" : "null"}
             onClick={() => {
-              props.showActive(3);
+              showActive(3);
             }}
           >
             Войти

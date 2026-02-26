@@ -4,7 +4,7 @@ import FavouriteCard from "../components/FavouriteCard/index";
 import { CgSmileSad } from "react-icons/cg";
 import { selectCard } from "../redux/slices/cardSlice";
 
-export default function Favourites(props) {
+export default function Favourites() {
   const { items } = useSelector(selectCard);
   const board =
     items.length > 0 ? (

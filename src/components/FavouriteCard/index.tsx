@@ -4,8 +4,13 @@ import { FcLike } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeItems } from "../../redux/slices/cardSlice";
+import type { FavoriteItem } from "../../redux/slices/cardSlice";
 
-export default function FavouriteCard({ catalog }) {
+interface FavouriteCardProps {
+  catalog: FavoriteItem;
+}
+
+export default function FavouriteCard({ catalog }: FavouriteCardProps) {
   const dispatch = useDispatch();
 
   const removeBoard = () => {

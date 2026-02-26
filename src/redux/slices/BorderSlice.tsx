@@ -1,19 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export interface Board {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  createdAt: string;
+  rating: number;
+  category: number;
+}
+
+interface fetchBoardParams {
+  page: number;
+  search: string;
+  activeSort: {
+    sortBy: string;
+    order: "asc" | "desc";
+    label: string;
+  };
+  activeFilter: number;
+}
+
+interface BorderState {
+  borders: Board[];
+  status: "idle" | "loading" | "ok" | "error";
+  error?: string | null;
+}
+
 // Initial State
-const initialState = {
+const initialState: BorderState = {
   borders: [],
   status: "loading",
 };
 
-export const fetchBoards = createAsyncThunk(
+export const fetchBoards = createAsyncThunk<Board[], fetchBoardParams>(
   "border/fetchBoards",
   async (params, { rejectWithValue }) => {
     try {
       const urlParams = new URLSearchParams();
-      urlParams.append("l", 3);
-      urlParams.append("p", params.page);
+      urlParams.append("l", "3");
+      urlParams.append("p", String(params.page));
       if (params.search) {
         urlParams.append("search", params.search);
       }
@@ -22,15 +49,15 @@ export const fetchBoards = createAsyncThunk(
         urlParams.append("order", params.activeSort.order);
       }
       if (params.activeFilter !== 0) {
-        urlParams.append("category", params.activeFilter);
+        urlParams.append("category", String(params.activeFilter));
       }
       const url = `https://698e3096aded595c25314dea.mockapi.io/boards?${urlParams}`;
 
-      const response = await axios.get(url);
+      const response = await axios.get<Board[]>(url); // ✅ Типизируем response
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue("Произошла ошибка");
     }
   },
 );
@@ -62,7 +89,7 @@ export const borderSlice = createSlice({
   },
 });
 
-export const selectBorder = (state) => state.border;
+export const selectBorder = (state: { border: BorderState }) => state.border;
 
 // Actions
 export const { getBoard } = borderSlice.actions;

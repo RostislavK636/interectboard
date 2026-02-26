@@ -1,10 +1,15 @@
 import React from "react";
-import Search from "./Search/index.js";
+import Search from "./Search/index";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCard } from "../redux/slices/cardSlice.js";
+import { selectCard } from "../redux/slices/cardSlice";
 
-export default function Header(props) {
+interface HeaderProps {
+  active: number;
+  showActive: (value: number) => void;
+}
+
+export default function Header({ active, showActive }: HeaderProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
   const { items } = useSelector(selectCard);
@@ -14,7 +19,7 @@ export default function Header(props) {
         <div
           className='logo-div'
           onClick={() => {
-            props.showActive(0);
+            showActive(0);
           }}
         >
           <h2>LikeBoard</h2>
@@ -32,18 +37,18 @@ export default function Header(props) {
       <ul className='nav'>
         <Link to='/interectboard'>
           <li
-            className={props.active === 0 ? "active" : "null"}
+            className={active === 0 ? "active" : "null"}
             onClick={() => {
-              props.showActive(0);
+              showActive(0);
             }}
           >
             Главная
           </li>
         </Link>
         <li
-          className={props.active === 1 ? "active" : "null"}
+          className={active === 1 ? "active" : "null"}
           onClick={() => {
-            props.showActive(1);
+            showActive(1);
           }}
         >
           О нас
@@ -51,9 +56,9 @@ export default function Header(props) {
         {location.pathname !== "/interectboard/favourites" ? (
           <Link to='/interectboard/favourites' className='fovourite'>
             <li
-              className={`fovourite-li ${props.active === 2 ? "active" : "null"}`}
+              className={`fovourite-li ${active === 2 ? "active" : "null"}`}
               onClick={() => {
-                props.showActive(2);
+                showActive(2);
               }}
             >
               Избранное
@@ -62,9 +67,9 @@ export default function Header(props) {
           </Link>
         ) : null}
         <li
-          className={props.active === 3 ? "active" : "null"}
+          className={active === 3 ? "active" : "null"}
           onClick={() => {
-            props.showActive(3);
+            showActive(3);
           }}
         >
           Войти
@@ -86,18 +91,18 @@ export default function Header(props) {
         <ul>
           <Link to='/interectboard'>
             <li
-              className={props.active === 0 ? "active" : "null"}
+              className={active === 0 ? "active" : "null"}
               onClick={() => {
-                props.showActive(0);
+                showActive(0);
               }}
             >
               Главная
             </li>
           </Link>
           <li
-            className={props.active === 1 ? "active" : "null"}
+            className={active === 1 ? "active" : "null"}
             onClick={() => {
-              props.showActive(1);
+              showActive(1);
             }}
           >
             О нас
@@ -105,9 +110,9 @@ export default function Header(props) {
           {location.pathname !== "/interectboard/favourites" ? (
             <Link to='/interectboard/favourites' className='fovourite'>
               <li
-                className={`fovourite-li ${props.active === 2 ? "active" : "null"}`}
+                className={`fovourite-li ${active === 2 ? "active" : "null"}`}
                 onClick={() => {
-                  props.showActive(2);
+                  showActive(2);
                 }}
               >
                 Избранное
@@ -116,9 +121,9 @@ export default function Header(props) {
             </Link>
           ) : null}
           <li
-            className={props.active === 3 ? "active" : "null"}
+            className={active === 3 ? "active" : "null"}
             onClick={() => {
-              props.showActive(3);
+              showActive(3);
             }}
           >
             Войти

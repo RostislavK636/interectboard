@@ -1,7 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface FilterState {
+  activeFilter: number;
+  page: number;
+  activeSort: {
+    sortBy: string;
+    order: "asc" | "desc";
+    label: string;
+  };
+  search: string;
+}
+
 // Initial State
-const initialState = {
+const initialState: FilterState = {
   activeFilter: 0,
   page: 1,
   activeSort: {
@@ -34,9 +45,13 @@ export const filterSlice = createSlice({
     setFilters(state, action) {
       state.page = parseInt(action.payload.page) || 1;
       state.activeFilter = parseInt(action.payload.activeFilter) || 0;
+      
+      // Валидируем order - принимаем только 'asc' или 'desc'
+      const order = action.payload.order === 'desc' ? 'desc' : 'asc';
+      
       state.activeSort = {
         sortBy: action.payload.sortBy || "createdAt",
-        order: action.payload.order || "asc",
+        order: order,
         label: action.payload.label || "возрастанию даты",
       };
       state.search = action.payload.search || "";
@@ -44,7 +59,7 @@ export const filterSlice = createSlice({
   },
 });
 
-export const selectFilter = (state) => state.filter;
+export const selectFilter = (state: { filter: FilterState }) => state.filter;
 
 // Actions
 export const {

@@ -7,14 +7,14 @@ import {
   setFilters,
   selectFilter,
 } from "./redux/slices/filterSlice";
-import { fetchBoards, selectBorder } from "./redux/slices/BorderSlice.js";
+import { fetchBoards, selectBorder } from "./redux/slices/BorderSlice";
 import qs from "qs";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FullBoard from "./components/FullBoard";
 import Home from "./page/Home";
-import Favourites from "./page/Favourites.js";
-import NotFound from "./components/NotFound/index.js";
+import Favourites from "./page/Favourites";
+import NotFound from "./components/NotFound/index";
 
 function App() {
   const nav = useNavigate();
@@ -31,15 +31,15 @@ function App() {
   const catalog = borders;
 
   // Handlers
-  const showActive = (index) => {
+  const showActive: (index: number) => void = (index) => {
     setActive(index);
   };
 
-  const handleSetActiveFilter = (value) => {
+  const handleSetActiveFilter: (value: number) => void = (value) => {
     dispatch(setActiveFilter(value));
   };
 
-  const handlSetPage = (num) => {
+  const handlSetPage: (num: number) => void = (num) => {
     dispatch(setPage(num));
   };
 
@@ -49,11 +49,14 @@ function App() {
 
   // Fetch boards from API
   const getApi = useCallback(() => {
-    dispatch(
+    (dispatch as any)(
       fetchBoards({
         page,
         search,
-        activeSort,
+        activeSort: {
+          ...activeSort,
+          order: activeSort.order as 'asc' | 'desc',  // ✅ Простое исправление
+        },
         activeFilter,
       }),
     );

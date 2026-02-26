@@ -4,8 +4,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function FullBoard() {
   const navigate = useNavigate();
-  const [board, setBoard] = useState();
-  const { boardId } = useParams();
+  const [board, setBoard] = useState<{
+    title: string;
+    description: string;
+    createdAt: string;
+  }>();
+  const { boardId } = useParams<{ boardId: string }>();
   useEffect(() => {
     async function fetchBoard() {
       try {
@@ -21,7 +25,7 @@ export default function FullBoard() {
     fetchBoard();
   }, [navigate, boardId]);
 
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = canvasRef.current;
@@ -29,14 +33,14 @@ export default function FullBoard() {
 
     root.style.position = "relative";
 
-    let dragged = null;
+    let dragged: HTMLElement | null = null;
     let shiftX = 0;
     let shiftY = 0;
 
-    const onMouseDown = (e) => {
-      let el = e.target;
-      while (!el && el !== root && !el.hasAttribute("data-js-dnd")) {
-        el = el.parentElement;
+    const onMouseDown = (e: MouseEvent) => {
+      let el = e.target as HTMLElement;
+      while (el && el !== root && !el.hasAttribute("data-js-dnd")) {
+        el = el.parentElement as HTMLElement;
       }
       if (!el || el === root) return;
 
@@ -54,7 +58,7 @@ export default function FullBoard() {
       document.addEventListener("mouseup", onMouseUp);
     };
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e: MouseEvent) => {
       if (!dragged) return;
 
       const rect = root.getBoundingClientRect();

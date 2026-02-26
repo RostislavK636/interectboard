@@ -10,7 +10,7 @@
   gap: 20px;
   flex-wrap: wrap;
 
-  li{
+  li {
     border: 1px solid rgb(131, 190, 249);
     border-radius: 15px;
     color: rgba(0, 0, 0, 0.741);
@@ -33,59 +33,54 @@
   padding-left: 5px;
 }
 
-.sort{
-    &_on{
-        display: block;
-        position: absolute;
-        top: 30px;
-        right: 0;
-        padding: 10px;
-        border: 1px solid black;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        background-color: rgb(255, 255, 255);
-        border-radius: 10px;
-        cursor: pointer;
-        li {
-            padding: 0 5px;
-            &:hover{
-                background: #E0E0E0;
-            }
-        }
+.sort {
+  &_on {
+    display: block;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    cursor: pointer;
+    li {
+      padding: 0 5px;
+      &:hover {
+        background: #e0e0e0;
+      }
     }
-    &_off{
-        display: none;
-    }
+  }
+  &_off {
+    display: none;
+  }
 }
 
 @media (max-width: 700px) {
   .root {
     .filter {
-    margin-block: 20px;
-    justify-content: center;
+      margin-block: 20px;
+      justify-content: center;
     }
     display: inline;
     p {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-        align-items: center;
-        }
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
+    }
   }
 
-
-
-  
-
-  .sort{ 
+  .sort {
     &_on {
-    top: 200px;
-    right: 10px;
-    min-width: 200px;
+      top: 200px;
+      right: 10px;
+      min-width: 200px;
     }
-    ul li{
-        padding-block: 5px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.52);
+    ul li {
+      padding-block: 5px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.52);
     }
   }
 }
-  
