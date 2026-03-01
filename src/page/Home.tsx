@@ -2,13 +2,8 @@ import React from "react";
 import Pagination from "../components/Pagination";
 import Catalog from "../components/Catalog";
 import Filter from "../components/Filter";
-import type { Board } from "../redux/slices/BorderSlice";
-
-interface SortOption {
-  sortBy: string;
-  order: "asc" | "desc";
-  label: string;
-}
+import type { Board } from "../types/index";
+import { SortOption } from "../types";
 
 interface HomeProps {
   catalog: Board[];
@@ -48,10 +43,7 @@ export default function Home({
         sortOptions={sortOptions}
       />
 
-      <Catalog
-        catalog={catalog}
-        isLoading={isLoading}
-      />
+      <Catalog catalog={catalog} isLoading={isLoading} />
 
       <Pagination page={(el) => setPage(el)} />
     </>

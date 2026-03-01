@@ -4,7 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItems, selectCard } from "../../redux/slices/cardSlice";
-import type { Board } from "../../redux/slices/BorderSlice";
+import type { Board } from "../../types/index";
 
 interface Catalog {
   catalog: Board;
@@ -17,7 +17,7 @@ export default function BoardCard({ catalog }: Catalog) {
   if (!catalog) return null;
 
   const { id, image, title, description, createdAt } = catalog;
-  const like = items.some((item: any) => item.id === id);
+  const like = items.some((item: Board) => item.id === id);
 
   const onClickRemove = () => {
     dispatch(removeItems(id));
@@ -29,6 +29,9 @@ export default function BoardCard({ catalog }: Catalog) {
       image,
       title,
       description,
+      createdAt,
+      rating: catalog.rating,
+      category: catalog.category,
     };
     dispatch(addItem(item));
   };

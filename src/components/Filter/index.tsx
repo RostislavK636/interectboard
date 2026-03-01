@@ -2,12 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setActiveSort } from "../../redux/slices/filterSlice";
 import style from "./Filter.module.scss";
-
-interface SortOption {
-  sortBy: string;
-  order: "asc" | "desc";
-  label: string;
-}
+import { SortOption } from "../../types";
 
 interface FiltersType {
   activeFilter: number;

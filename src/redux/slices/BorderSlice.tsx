@@ -1,15 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-
-export interface Board {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  createdAt: string;
-  rating: number;
-  category: number;
-}
+import { Board } from "../../types";
 
 interface fetchBoardParams {
   page: number;
@@ -67,7 +58,7 @@ export const borderSlice = createSlice({
   name: "border",
   initialState,
   reducers: {
-    getBoard(state, action) {
+    getBoard(state, action: PayloadAction<Board[]>) {
       state.borders = action.payload;
     },
   },
@@ -77,14 +68,17 @@ export const borderSlice = createSlice({
       .addCase(fetchBoards.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchBoards.fulfilled, (state, action) => {
-        state.status = "ok";
-        state.borders = action.payload;
-      })
-      .addCase(fetchBoards.rejected, (state, action) => {
+      .addCase(
+        fetchBoards.fulfilled,
+        (state, action: PayloadAction<Board[]>) => {
+          state.status = "ok";
+          state.borders = action.payload;
+        },
+      )
+      .addCase(fetchBoards.rejected, (state) => {
         state.status = "error";
         state.borders = [];
-        console.log("Ошибка запроса", action.payload);
+        console.log("Ошибка запроса");
       });
   },
 });

@@ -5,6 +5,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 export default function FullBoard() {
   const navigate = useNavigate();
   const [board, setBoard] = useState<{
+    id: string;
+    rating: number;
+    category: number;
     title: string;
     description: string;
     createdAt: string;

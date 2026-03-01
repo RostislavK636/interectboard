@@ -4,10 +4,10 @@ import { FcLike } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeItems } from "../../redux/slices/cardSlice";
-import type { FavoriteItem } from "../../redux/slices/cardSlice";
+import type { Board } from "../../types/index";
 
 interface FavouriteCardProps {
-  catalog: FavoriteItem;
+  catalog: Board;
 }
 
 export default function FavouriteCard({ catalog }: FavouriteCardProps) {

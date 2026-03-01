@@ -1,16 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// Тип для элемента в избранном (упрощенная версия Board)
-export interface FavoriteItem {
-  id: string;
-  image: string;
-  title: string;
-  description: string;
-}
+import { Board } from "../../types";
 
 // Тип состояния
 interface CardState {
-  items: FavoriteItem[];
+  items: Board[];
 }
 
 // Initial State
@@ -23,7 +16,7 @@ export const cardSlice = createSlice({
   name: "card",
   initialState,
   reducers: {
-    addItem(state, action: PayloadAction<FavoriteItem>) {
+    addItem(state, action: PayloadAction<Board>) {
       state.items.push(action.payload);
     },
     removeItems(state, action: PayloadAction<string>) {

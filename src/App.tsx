@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setActiveFilter,
   setPage,
@@ -15,6 +15,7 @@ import FullBoard from "./components/FullBoard";
 import Home from "./page/Home";
 import Favourites from "./page/Favourites";
 import NotFound from "./components/NotFound/index";
+import { useAppDispatch } from "./redux/store";
 
 function App() {
   const nav = useNavigate();
@@ -22,7 +23,7 @@ function App() {
   // Redux
   const { activeFilter, activeSort, page, search } = useSelector(selectFilter);
   const { borders, status } = useSelector(selectBorder);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Local state
   const [active, setActive] = useState(0);
@@ -49,13 +50,13 @@ function App() {
 
   // Fetch boards from API
   const getApi = useCallback(() => {
-    (dispatch as any)(
+    dispatch(
       fetchBoards({
         page,
         search,
         activeSort: {
           ...activeSort,
-          order: activeSort.order as 'asc' | 'desc',  // ✅ Простое исправление
+          order: activeSort.order as "asc" | "desc",
         },
         activeFilter,
       }),
