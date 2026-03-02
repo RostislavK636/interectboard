@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/222.01332943.chunk.css","mappings":"AAAA,sBAEE,kBADA,iBACA,CAEF,wBACE,sBACE","sources":["components/NotFound/NotFound.module.scss"],"sourcesContent":[".root {\r\n  text-align: center;\r\n  margin-block: 50px;\r\n}\r\n@media (max-width: 700px) {\r\n  .root {\r\n    font-size: 0.8rem;\r\n  }\r\n}\r\n"],"names":[],"sourceRoot":""}
