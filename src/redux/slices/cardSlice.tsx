@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Board } from "../../types";
+import { getCartFromLS } from "../../utils/getCartFromLS";
 
 // Тип состояния
 interface CardState {
@@ -8,7 +9,7 @@ interface CardState {
 
 // Initial State
 const initialState: CardState = {
-  items: [],
+  items: getCartFromLS(),
 };
 
 // Slice

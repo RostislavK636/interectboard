@@ -13,6 +13,14 @@ export default function Header({ active, showActive }: HeaderProps) {
   const location = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
   const { items } = useSelector(selectCard);
+  const isMounted = React.useRef(false);
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(items);
+      localStorage.setItem("cart", json);
+    }
+    isMounted.current = true;
+  }, [items]);
   return (
     <div className='header-div'>
       <Link to='/interectboard'>

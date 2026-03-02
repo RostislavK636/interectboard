@@ -11,11 +11,11 @@ import { fetchBoards, selectBorder } from "./redux/slices/BorderSlice";
 import qs from "qs";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import FullBoard from "./components/FullBoard";
 import Home from "./page/Home";
-import Favourites from "./page/Favourites";
-import NotFound from "./components/NotFound/index";
 import { useAppDispatch } from "./redux/store";
+const Favourites = React.lazy(() => import("./page/Favourites"));
+const FullBoard = React.lazy(() => import("./components/FullBoard"));
+const NotFound = React.lazy(() => import("./components/NotFound/index"));
 
 function App() {
   const nav = useNavigate();
@@ -115,9 +115,30 @@ function App() {
             />
           }
         />
-        <Route path='/interectboard/board/:boardId' element={<FullBoard />} />
-        <Route path='/interectboard/favourites' element={<Favourites />} />
-        <Route path='*' element={<NotFound />} />
+        <Route
+          path='/interectboard/board/:boardId'
+          element={
+            <React.Suspense fallback='Идет загрузка...'>
+              <FullBoard />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path='/interectboard/favourites'
+          element={
+            <React.Suspense fallback='Идет загрузка...'>
+              <Favourites />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path='*'
+          element={
+            <React.Suspense fallback='Идет загрузка...'>
+              <NotFound />
+            </React.Suspense>
+          }
+        />
       </Routes>
       <Footer showActive={showActive} active={active} />
     </div>
